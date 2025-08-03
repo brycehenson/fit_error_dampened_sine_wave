@@ -1,0 +1,71 @@
+make_packages_available.ps1
+.idea/
+.pytest_cache/
+__pycache__
+**/.venv
+.ipynb_checkpoints
+temp*
+.Trash*
+
+
+# coverage files
+lcov.info
+# code quality output
+pylint_codequality.json
+
+# temp folders created in tests
+temp_fio*
+
+# ignore folder
+ignore
+
+# Python generated stuff
+**/dist/*
+
+# temps
+*.orig
+*.tmp
+*.bak
+
+# local envs, etc.
+venv/
+
+# outputs
+*.png
+*.dat
+**/data/
+
+# Coverage artifacts
+.coverage.*
+.coverage
+report.txt
+coverage.xml
+
+# logs
+*.log
+*.log.*
+
+# zips
+*.xz
+*.zip
+*.7z
+
+### Vim ###
+# Swap
+*.swp
+
+# Session
+Session.vim
+Sessionx.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
+#DS Store
+.DS_Store
+.aider*
