@@ -9,8 +9,6 @@ echo "PROJECTPATH environment variable set to ${QCSTACKPATH}"
 # Add bash completions
 echo "source /usr/share/bash-completion/completions/git" >> ~/.bashrc && \
 
-
-
 # Setup some git settings to make it work out of the box
 git config --global --add safe.directory ${PROJECTPATH}
 
@@ -25,16 +23,9 @@ pre-commit install
 # Make sure everything is owned by us (we used to use the root user in the container)
 sudo chown -R vscode:vscode $PROJECTPATH
 
-# Merge by default
-git config pull.rebase false
-# Get latest
-git -C . status
-git pull || echo "Warning: 'git pull' failed, but continuing..."
-git push || echo "Warning: 'git push' failed, but continuing..."
-popd
-
 # Install the packages
-pip install -e .
+./install.sh
 
 # fix jupyter behaviour
 .devcontainer/fix_jupyter.sh
+

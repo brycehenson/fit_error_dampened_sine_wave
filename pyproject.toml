@@ -3,11 +3,32 @@ name = "my_project"
 version = "0.1.0"
 description = "Example Python project setup"
 authors = ["Your Name <your.email@example.com>"]
-packages = [{ include = "my_package", from = "src" }]
+packages = [{ include = "*", from = "src" }]  # Automatically include everything in src/
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
 numpy = "^1.26"
+pytest = { version = "^7.4.4", extras = [
+    "psutil",
+] } # this optional package allows "addopts=-nauto" to work in the pytest.ini
+pytest-xdist = "^3.5.0"
+pytest-asyncio = "^0.23.6"
+pytest-mock = "^3.12.0"
+aioresponses = "^0.7.3"
+setuptools = "^69.0.3" # needed to solve https://github.com/python-poetry/poetry/issues/6328
+tqdm = "^4.66.1"
+big-O = "^0.10.2"
+black = { extras = [
+    "jupyter",
+], version = "24.2.0" } #  ci pipeline will grab version used in lock file
+isort = "5.13.2" #  ci pipeline will grab version used in lock file
+pytest-cov = "4.1.0"
+pytest-timeout = "^2.3.1"
+nbqa = "^1.9.1"
+ipykernel = "^6.29.5"
+
+
 
 [build-system]
 requires = ["poetry-core"]
