@@ -1,0 +1,84 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // when running the debugger we want pytest to only use a single process as otherwise it spins up all the
+        // processes with debuggers (which takes a reasonable amount of time) to then only use one of them
+        // the solution is to call the debugger with a different pytest config file
+        // solution from here
+        // https://old.reddit.com/r/vscode/comments/1aqoatw/python_separate_pytest_config_for_running_tests/
+        // hopefully debugpy supports this before python as a debugger becomes deprecated
+        {
+            "name": "Python: Debug Tests",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "purpose": [
+                "debug-test"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTEST_ADDOPTS": "-c tools/single_thread_pytest.ini",
+            }
+        },
+        {
+            "name": "notebook_server",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "qb.notebook_server.notebook_server",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--timezone",
+                "geolocation",
+                "--config",
+                "${workspaceFolder}/apps/notebook_server/qb/notebook_server/jupyter_notebook_config.py"
+            ]
+        },
+        {
+            "name": "qcstack_server",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "qb.qcstack_server.qcstack_server",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/apps/qcstack_server",
+            "justMyCode": true,
+            "args": [
+                "--python-log-level",
+                "INFO",
+                "--raise-measurement-process-and-plot-exceptions",
+                "--reservation-shared-secret",
+                "hello",
+                // Following lines for testing with sim
+                // "--calibration",
+                // "False",
+                // "--phys-sys-path",
+                // "${workspaceFolder}/apps/qcstack_server/tests/files/phys_sys_example.json"
+                // "--dummy-system",
+                "--system",
+                "${input:system_file}"
+            ],
+        },
+    ],
+    "inputs": [
+        {
+            "type": "pickString",
+            "id": "system_file",
+            "description": "Choose which quantum computer system",
+            "options": [
+                "alignmentrig",
+                "qutip_sim",
+                "dqc1",
+                "dqc2-eb",
+                "dummy",
+                "vqpu",
+                "randomised-dummy",
+                "IAF_ZCU111"
+            ],
+            "default": "randomised-dummy"
+        }
+    ]
+}

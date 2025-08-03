@@ -1,0 +1,8 @@
+{
+    // Leave empty. Otherwise, co-workers of workspace will be harrassed with alerts. 
+    // Required extensions should be added to the devcontainer.
+    "recommendations": [
+        // the bare minimum to get the docker running
+        "ms-vscode-remote.vscode-remote-extensionpack"
+    ]
+}

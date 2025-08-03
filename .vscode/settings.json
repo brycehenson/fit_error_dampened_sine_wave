@@ -1,0 +1,150 @@
+{
+    "python.defaultInterpreterPath": "/usr/local/bin/python",
+    // Don't watch items that we don't care about
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/__pycache__/*/**": true,
+        "**/.pytest_cache/**": true,
+        "**/node_modules/*/**": true,
+        "/onedrive/**": true
+    },
+    // Dont search in the data because it takes forever
+    "search.exclude": {
+        "**/.git": true,
+        "*/qbdata": true,
+        //    "*/notebooks": true,
+    },
+    "editor.formatOnSave": true,
+    "jupyter.notebookFileRoot": "${WorkspaceFolder}",
+    "notebook.formatOnSave.enabled": false,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "editor.rulers": [
+        120
+    ],
+    "python.languageServer": "Pylance",
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.autoTestDiscoverOnSaveEnabled": true,
+    // Spell check only in comments & strings
+    "cSpell.languageSettings": [
+        // This one works with Python
+        {
+            "languageId": "python",
+            "includeRegExpList": [
+                "/#.*/",
+                "/('''|\"\"\")[^\\1]+?\\1/g",
+                "strings"
+            ]
+        },
+        // This one works with JavaScript, Typescript, etc
+        {
+            "languageId": "javascript,typescript",
+            "includeRegExpList": [
+                "CStyleComment",
+                "strings"
+            ]
+        }
+    ],
+    "auto-correct.dictionary": [
+        {
+            "languages": [
+                "*"
+            ],
+            "words": {
+                "cosnt": "const",
+                "functoin": "function",
+                "environement": "environnement",
+                "uncertinaty": "uncertainty",
+                "uncertianty": "uncertainty",
+                "uncert": "uncertainty",
+                "aproximation": "approximation",
+                "controll": "control",
+                "integerated": "integrated",
+                "aquiring": "acquiring",
+                "possonian": "poissonian",
+                "ballanced": "balanced",
+                "integerand": "integrand",
+                "measurment": "measurement",
+                "isnt": "isn't",
+                "inital": "initial",
+                "circut": "circuit",
+            },
+            "useLargeList": false
+        },
+    ],
+    "autoDocstring.docstringFormat": "google-notypes",
+    "cSpell.language": "en,en-GB,en-US",
+    "workbench.iconTheme": "vscode-icons",
+    "todo-tree.tree.scanMode": "open files",
+    "todo-tree.regexCaseSensitive": false,
+    // Enable compound words like 'errormessage'
+    "cSpell.allowCompoundWords": true,
+    // Import custom dictionaries with words like 'ODMR', 'qcstack'.
+    "cSpell.customDictionaries": {
+        "physics": {
+            "name": "physics",
+            "path": "./.vscode/dictionary/physics.txt",
+            "scope": "workspace",
+            "addWords": true
+        },
+        "misc": {
+            "name": "misc",
+            "path": "./.vscode/dictionary/misc.txt",
+            "scope": "workspace",
+            "addWords": true
+        }
+    },
+    "cSpell.flagWords": [
+        // this is the wrong plural
+        "axes_names"
+    ],
+    // Default end-of-line character to UNIX-style
+    "files.eol": "\n",
+    // auto wrap lines in comments
+    "rewrap.autoWrap.enabled": true,
+    "rewrap.wrappingColumn": 120,
+    "files.autoSave": "onFocusChange",
+    "todo-tree.regex.regexCaseSensitive": false,
+    "cSpell.ignorePaths": [
+        "package-lock.json",
+        "node_modules",
+        "vscode-extension",
+        ".git/objects",
+        ".vscode",
+        ".vscode-insiders",
+        ".devcontainer",
+        "__pycache__"
+    ],
+    "remote.localPortHost": "allInterfaces",
+    "notebook.output.textLineLimit": 200,
+    "git.autofetch": "all",
+    "git.autofetchPeriod": 300,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "files.trimTrailingWhitespace": true,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        },
+    },
+    "isort.args": [
+        "--profile",
+        "black"
+    ],
+    "black-formatter.importStrategy": "fromEnvironment",
+    "isort.check": true,
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.autoImportCompletions": true,
+    "terminal.integrated.scrollback": 100000,
+    // number of cores to be used by pylint
+    "pylint.args": [
+        "-j 4"
+    ],
+    "workbench.editorLargeFileConfirmation": 50
+}

@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "my_project"
+version = "0.1.0"
+description = "Example Python project setup"
+authors = ["Your Name <your.email@example.com>"]
+packages = [{ include = "my_package", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^1.26"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,53 @@
+{
+	"name": "Python 3",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "..",
+		"args": {
+			"VARIANT": "3.13-bookworm"
+		}
+	},
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.pylint",
+				"ms-python.black-formatter",
+				"ms-python.isort",
+				"ms-toolsai.jupyter",
+				"ms-toolsai.jupyter-keymap",
+				"ms-toolsai.jupyter-renderers",
+				"yzhang.markdown-all-in-one",
+				"streetsidesoftware.code-spell-checker",
+				"vscode-icons-team.vscode-icons",
+				"mhutchie.git-graph",
+				"njpwerner.autodocstring",
+				"Gruntfuggly.todo-tree",
+				"GitLab.gitlab-workflow",
+				"stkb.rewrap",
+				"ms-vsliveshare.vsliveshare",
+				"sygene.auto-correct",
+				"njqdev.vscode-python-typehint",
+				"ryanluker.vscode-coverage-gutters",
+				"tomoki1207.pdf",
+				"ms-azuretools.vscode-docker",
+				"tamasfe.even-better-toml",
+				"redhat.vscode-yaml"
+			]
+		}
+	},
+	// add an environment variable so to make it easier to find the project root from a notebook
+	"containerEnv": {
+		"ProjectPath": "${containerWorkspaceFolder}",
+		"WorkspaceFolder": "${containerWorkspaceFolder}"
+	},
+	// Fix the permissions - the devcontainer maps the user to the system user, so this needs to be done here.
+	"onCreateCommand": ".devcontainer/fix_permissions.sh",
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": ".devcontainer/post_create_commands.sh",
+	"remoteUser": "vscode"
+}
