@@ -16,3 +16,37 @@ def damp_sine_wave(
         * np.exp(-damping_rate * time)
         * np.sin(2 * np.pi * frequency * time + phase)
     )
+
+
+def apparent_frequency(f: float, f_s: float) -> float:
+    """Compute the apparent frequency (alias) observed when sampling a signal with a true frequency `f`
+    at a sampling frequency `f_s`.
+
+    from
+    "Trap Frequency Measurement with a Pulsed Atom Laser"
+    B. M. Henson,∗ K. F. Thomas, Z. Mehdi, T. G. Burnett, J. A. Ross, S. S. Hodgman, and A. G. Truscot
+    https://arxiv.org/pdf/2201.10021
+
+    This follows the piecewise formula given in the figure:
+    f_a = -f + N*f_s/2 for even N
+    f_a =  f - (N-1)*f_s/2 for odd N
+
+    Both axes are assumed to be normalized by the true frequency f, so f=1 in most uses.
+
+    Args:
+        f: True frequency of the signal (must be positive and nonzero)
+        f_s: Sampling frequency
+
+    Returns:
+        Apparent frequency `f_a`, normalized by `f`
+    """
+    assert f > 0, "True frequency f must be positive and nonzero"
+
+    N: int = int(np.floor(2 * f / f_s)) + 1  # Determine Nyquist zone index
+
+    if N % 2 == 0:
+        f_a: float = -f + N * f_s / 2
+    else:
+        f_a: float = f - (N - 1) * f_s / 2
+
+    return f_a

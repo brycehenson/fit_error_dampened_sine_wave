@@ -56,7 +56,7 @@ def analy_err_in_fit_sine(
     )
 
 
-def analy_err_in_fit_damp_sine(
+def analy_err_in_fit_damp_sine_old_wrong(
     amp: float,
     samp_num: int,
     samp_time: float,
@@ -64,6 +64,8 @@ def analy_err_in_fit_damp_sine(
     damp_rate: Optional[float] = None,
 ) -> FitDampSineUncertaintyEstimate:
     """Estimate parameter uncertainties for damped sine wave fit.
+
+    OLD AND WRONG DOES NOT INCULDE CROSS TERMS
 
 
     from https://github.com/HeBECANU/Core_BEC_Analysis/blob/dev/lib/fits/analy_err_in_fit_sine.m
@@ -166,7 +168,7 @@ def analy_err_in_fit_damp_sine(
     )
 
 
-def analy_err_in_fit_damp_sine_testing(
+def analy_err_in_fit_damp_sine(
     amp: float,
     samp_num: int,
     samp_time: float,
@@ -196,101 +198,105 @@ def analy_err_in_fit_damp_sine_testing(
     FitUncertaintyEstimate
         Data structure containing uncertainty estimates.
     """
-
-    var_a = (
-        8
-        * damp_rate
-        * samp_time
-        * sigma_obs**2
-        * (
-            2 * damp_rate**2 * samp_time**2
-            + 2 * damp_rate * samp_time
-            - np.exp(2 * damp_rate * samp_time)
-            + 1
-        )
-        * np.exp(2 * damp_rate * samp_time)
-        / (
-            samp_num
+    with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+        var_a = (
+            8
+            * damp_rate
+            * samp_time
+            * sigma_obs**2
             * (
-                4 * damp_rate**2 * samp_time**2 * np.exp(2 * damp_rate * samp_time)
-                - np.exp(4 * damp_rate * samp_time)
-                + 2 * np.exp(2 * damp_rate * samp_time)
-                - 1
+                2 * damp_rate**2 * samp_time**2
+                + 2 * damp_rate * samp_time
+                - np.exp(2 * damp_rate * samp_time)
+                + 1
+            )
+            * np.exp(2 * damp_rate * samp_time)
+            / (
+                samp_num
+                * (
+                    4 * damp_rate**2 * samp_time**2 * np.exp(2 * damp_rate * samp_time)
+                    - np.exp(4 * damp_rate * samp_time)
+                    + 2 * np.exp(2 * damp_rate * samp_time)
+                    - 1
+                )
             )
         )
-    )
 
-    sigma_amp = np.sqrt(var_a)
-    # fudge factor
-    # sigma_amp = sigma_amp * 1.5
+        sigma_amp = np.sqrt(var_a)
+        # fudge factor
+        # sigma_amp = sigma_amp * 1.5
 
-    var_omega = (
-        16
-        * damp_rate**3
-        * samp_time
-        * sigma_obs**2
-        * (1 - math.exp(2 * damp_rate * samp_time))
-        * math.exp(2 * damp_rate * samp_time)
-        / (
-            amp**2
-            * samp_num
-            * (
-                4 * damp_rate**2 * samp_time**2 * math.exp(2 * damp_rate * samp_time)
-                - math.exp(4 * damp_rate * samp_time)
-                + 2 * math.exp(2 * damp_rate * samp_time)
-                - 1
+        var_omega = (
+            16
+            * damp_rate**3
+            * samp_time
+            * sigma_obs**2
+            * (1 - np.exp(2 * damp_rate * samp_time))
+            * np.exp(2 * damp_rate * samp_time)
+            / (
+                amp**2
+                * samp_num
+                * (
+                    4 * damp_rate**2 * samp_time**2 * np.exp(2 * damp_rate * samp_time)
+                    - np.exp(4 * damp_rate * samp_time)
+                    + 2 * np.exp(2 * damp_rate * samp_time)
+                    - 1
+                )
             )
         )
-    )
+        if np.isinf(var_omega):
+            var_omega = np.nan
+        sigma_freq = np.sqrt(var_omega) / (np.pi * 2)
 
-    sigma_freq = math.sqrt(var_omega) / (np.pi * 2)
-
-    var_phi = (
-        8
-        * damp_rate
-        * samp_time
-        * sigma_obs**2
-        * (
-            2 * damp_rate**2 * samp_time**2
-            + 2 * damp_rate * samp_time
-            - math.exp(2 * damp_rate * samp_time)
-            + 1
-        )
-        * math.exp(2 * damp_rate * samp_time)
-        / (
-            amp**2
-            * samp_num
+        var_phi = (
+            8
+            * damp_rate
+            * samp_time
+            * sigma_obs**2
             * (
-                4 * damp_rate**2 * samp_time**2 * math.exp(2 * damp_rate * samp_time)
-                - math.exp(4 * damp_rate * samp_time)
-                + 2 * math.exp(2 * damp_rate * samp_time)
-                - 1
+                2 * damp_rate**2 * samp_time**2
+                + 2 * damp_rate * samp_time
+                - np.exp(2 * damp_rate * samp_time)
+                + 1
+            )
+            * np.exp(2 * damp_rate * samp_time)
+            / (
+                amp**2
+                * samp_num
+                * (
+                    4 * damp_rate**2 * samp_time**2 * np.exp(2 * damp_rate * samp_time)
+                    - np.exp(4 * damp_rate * samp_time)
+                    + 2 * np.exp(2 * damp_rate * samp_time)
+                    - 1
+                )
             )
         )
-    )
+        if np.isinf(var_phi):
+            var_phi = np.nan
+        sigma_phi = np.sqrt(var_phi)
 
-    sigma_phi = math.sqrt(var_phi)
-
-    var_lambda = (
-        16
-        * damp_rate**3
-        * samp_time
-        * sigma_obs**2
-        * (1 - math.exp(2 * damp_rate * samp_time))
-        * math.exp(2 * damp_rate * samp_time)
-        / (
-            amp**2
-            * samp_num
-            * (
-                4 * damp_rate**2 * samp_time**2 * math.exp(2 * damp_rate * samp_time)
-                - math.exp(4 * damp_rate * samp_time)
-                + 2 * math.exp(2 * damp_rate * samp_time)
-                - 1
+        var_lambda = (
+            16
+            * damp_rate**3
+            * samp_time
+            * sigma_obs**2
+            * (1 - np.exp(2 * damp_rate * samp_time))
+            * np.exp(2 * damp_rate * samp_time)
+            / (
+                amp**2
+                * samp_num
+                * (
+                    4 * damp_rate**2 * samp_time**2 * np.exp(2 * damp_rate * samp_time)
+                    - np.exp(4 * damp_rate * samp_time)
+                    + 2 * np.exp(2 * damp_rate * samp_time)
+                    - 1
+                )
             )
         )
-    )
 
-    sigma_lambda = math.sqrt(var_lambda)
+        if np.isinf(var_lambda):
+            var_lambda = np.nan
+        sigma_lambda = np.sqrt(var_lambda)
 
     return FitDampSineUncertaintyEstimate(
         amplitude=sigma_amp,

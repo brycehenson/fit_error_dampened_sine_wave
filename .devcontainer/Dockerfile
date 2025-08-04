@@ -2,7 +2,7 @@ ARG VARIANT=3.13-bookworm
 FROM mcr.microsoft.com/devcontainers/python:1-${VARIANT}
 
 
-# Base setup and dependencies
+# Base setup and dependenciess
 RUN echo "Removing the debian system python since we don't need two pythons" && \
     apt-get -y remove python3 && sudo apt-get -y autoremove && \
     echo "Adding ping and curl!" && \
@@ -26,6 +26,13 @@ RUN echo "Removing the debian system python since we don't need two pythons" && 
     mkdir /root/setup_scripts && \
     echo "Done base setup"
 
+# Install Chrome for Kaleido
+RUN apt-get update && apt-get install -y wget gnupg && \
+    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
+    apt-get update && \
+    apt-get install -y google-chrome-stable
+ENV CHROME_PATH="/usr/bin/google-chrome"
 
 # Copy the script to install poetry
 COPY .devcontainer/*.sh /setup_scripts/
