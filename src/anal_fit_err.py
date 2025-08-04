@@ -1,4 +1,3 @@
-import math
 from dataclasses import dataclass
 from typing import Optional
 
@@ -205,19 +204,17 @@ def analy_err_in_fit_damp_sine(
             * samp_time
             * sigma_obs**2
             * (
-                2 * damp_rate**2 * samp_time**2
-                + 2 * damp_rate * samp_time
-                - np.exp(2 * damp_rate * samp_time)
-                + 1
+                damp_rate**2 * samp_time**2
+                + damp_rate * samp_time
+                - 1 / 2 * np.exp(2 * damp_rate * samp_time)
+                + 1 / 2
             )
-            * np.exp(2 * damp_rate * samp_time)
             / (
                 samp_num
                 * (
-                    4 * damp_rate**2 * samp_time**2 * np.exp(2 * damp_rate * samp_time)
-                    - np.exp(4 * damp_rate * samp_time)
-                    + 2 * np.exp(2 * damp_rate * samp_time)
-                    - 1
+                    2 * damp_rate**2 * samp_time**2
+                    - np.cosh(2 * damp_rate * samp_time)
+                    + 1
                 )
             )
         )
@@ -227,23 +224,22 @@ def analy_err_in_fit_damp_sine(
         # sigma_amp = sigma_amp * 1.5
 
         var_omega = (
-            16
+            -8
             * damp_rate**3
             * samp_time
             * sigma_obs**2
-            * (1 - np.exp(2 * damp_rate * samp_time))
-            * np.exp(2 * damp_rate * samp_time)
+            * (np.exp(2 * damp_rate * samp_time) - 1)
             / (
                 amp**2
                 * samp_num
                 * (
-                    4 * damp_rate**2 * samp_time**2 * np.exp(2 * damp_rate * samp_time)
-                    - np.exp(4 * damp_rate * samp_time)
-                    + 2 * np.exp(2 * damp_rate * samp_time)
-                    - 1
+                    2 * damp_rate**2 * samp_time**2
+                    - np.cosh(2 * damp_rate * samp_time)
+                    + 1
                 )
             )
         )
+
         if np.isinf(var_omega):
             var_omega = np.nan
         sigma_freq = np.sqrt(var_omega) / (np.pi * 2)
@@ -254,42 +250,39 @@ def analy_err_in_fit_damp_sine(
             * samp_time
             * sigma_obs**2
             * (
-                2 * damp_rate**2 * samp_time**2
-                + 2 * damp_rate * samp_time
-                - np.exp(2 * damp_rate * samp_time)
-                + 1
+                damp_rate**2 * samp_time**2
+                + damp_rate * samp_time
+                - 1 / 2 * np.exp(2 * damp_rate * samp_time)
+                + 1 / 2
             )
-            * np.exp(2 * damp_rate * samp_time)
             / (
                 amp**2
                 * samp_num
                 * (
-                    4 * damp_rate**2 * samp_time**2 * np.exp(2 * damp_rate * samp_time)
-                    - np.exp(4 * damp_rate * samp_time)
-                    + 2 * np.exp(2 * damp_rate * samp_time)
-                    - 1
+                    2 * damp_rate**2 * samp_time**2
+                    - np.cosh(2 * damp_rate * samp_time)
+                    + 1
                 )
             )
         )
+
         if np.isinf(var_phi):
             var_phi = np.nan
         sigma_phi = np.sqrt(var_phi)
 
         var_lambda = (
-            16
+            -8
             * damp_rate**3
             * samp_time
             * sigma_obs**2
-            * (1 - np.exp(2 * damp_rate * samp_time))
-            * np.exp(2 * damp_rate * samp_time)
+            * (np.exp(2 * damp_rate * samp_time) - 1)
             / (
                 amp**2
                 * samp_num
                 * (
-                    4 * damp_rate**2 * samp_time**2 * np.exp(2 * damp_rate * samp_time)
-                    - np.exp(4 * damp_rate * samp_time)
-                    + 2 * np.exp(2 * damp_rate * samp_time)
-                    - 1
+                    2 * damp_rate**2 * samp_time**2
+                    - np.cosh(2 * damp_rate * samp_time)
+                    + 1
                 )
             )
         )

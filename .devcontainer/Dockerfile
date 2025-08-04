@@ -26,13 +26,9 @@ RUN echo "Removing the debian system python since we don't need two pythons" && 
     mkdir /root/setup_scripts && \
     echo "Done base setup"
 
-# Install Chrome for Kaleido
-RUN apt-get update && apt-get install -y wget gnupg && \
-    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable
-ENV CHROME_PATH="/usr/bin/google-chrome"
+# install requirements for kaleido
+RUN  sudo apt update && \
+    sudo apt-get install -y libnss3 libatk-bridge2.0-0 libcups2 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libpango-1.0-0 libcairo2 libasound2
 
 # Copy the script to install poetry
 COPY .devcontainer/*.sh /setup_scripts/

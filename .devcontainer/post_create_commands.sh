@@ -6,6 +6,9 @@ set -e
 export PROJECTPATH=$PWD
 echo "PROJECTPATH environment variable set to ${QCSTACKPATH}"
 
+export BROWSER_PATH="/usr/local/bin/chrome-wrapper"
+echo "BROWSER_PATH environment variable set to ${BROWSER_PATH}"
+
 # Add bash completions
 echo "source /usr/share/bash-completion/completions/git" >> ~/.bashrc && \
 
@@ -29,3 +32,6 @@ sudo chown -R vscode:vscode $PROJECTPATH
 # fix jupyter behaviour
 .devcontainer/fix_jupyter.sh
 
+# get the embeded chrome for kaleido
+# This is needed for static image export in Plotly
+python3 -c "import kaleido; kaleido.get_chrome_sync()"
