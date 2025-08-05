@@ -25,7 +25,23 @@ def analy_err_in_fit_sine(
 ) -> FitSineUncertaintyEstimate:
     """Estimate parameter uncertainties for damped sine wave fit.
 
-    from https://github.com/HeBECANU/Core_BEC_Analysis/blob/dev/lib/fits/analy_err_in_fit_sine.m
+    from
+    "A derivation of the errors for least squares fitting to time series data"
+    Michael Houston Montgomery, D. Odonoghue
+
+    bibtex
+
+    @ARTICLE{MontgomeryOdonoghue1999,
+    author = {{Montgomery}, M.~H. and {Odonoghue}, D.},
+        title = "{A derivation of the errors for least squares fitting to time series data}",
+    journal = {Delta Scuti Star Newsletter},
+        year = 1999,
+        month = jul,
+    volume = 13,
+        pages = {28},
+    url = {http://adsabs.harvard.edu/abs/1999DSSN...13...28M},
+    }
+
 
     Parameters
     ----------
@@ -46,7 +62,7 @@ def analy_err_in_fit_sine(
 
     sigma_amp = np.sqrt(2 / samp_num) * sigma_obs
     sigma_freq = np.sqrt(6 / samp_num) * (sigma_obs / (np.pi * samp_time * amplitude))
-    sigma_phi = np.sqrt(2 / samp_num) * sigma_obs / amplitude * 2
+    sigma_phi = np.sqrt(2 / samp_num) * sigma_obs / amplitude
 
     return FitSineUncertaintyEstimate(
         amplitude=sigma_amp,
@@ -176,8 +192,7 @@ def analy_err_in_fit_damp_sine(
 ) -> FitDampSineUncertaintyEstimate:
     """Estimate parameter uncertainties for damped sine wave fit.
 
-
-    from https://github.com/HeBECANU/Core_BEC_Analysis/blob/dev/lib/fits/analy_err_in_fit_sine.m
+    Accurate and tested !
 
     Parameters
     ----------
