@@ -75,9 +75,6 @@ To reproduce see
 demos/compare_to_fit.ipynb
 ```
 
-| ![Uncertainty in Amplitude](/demos/figures/uncertainty_amplitude.png "Uncertainty in Amplitude") |
-| :----------------------------------------------------------------------------------------------: |
-|                             **Figure 1** - Uncertainty in amplitude.                             |
 
 
 | ![Uncertainty in Damping Rate](/demos/figures/uncertainty_damping_rate.png "Uncertainty in Damping Rate") |
@@ -89,6 +86,10 @@ demos/compare_to_fit.ipynb
 | :----------------------------------------------------------------------------------------------: |
 |                             **Figure 3** - Uncertainty in frequency.                             |
 
+
+| ![Uncertainty in Amplitude](/demos/figures/uncertainty_amplitude.png "Uncertainty in Amplitude") |
+| :----------------------------------------------------------------------------------------------: |
+|                             **Figure 1** - Uncertainty in amplitude.                             |
 
 | ![Uncertainty in Phase](/demos/figures/uncertainty_phase.png "Uncertainty in Phase") |
 | :----------------------------------------------------------------------------------: |
