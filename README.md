@@ -17,17 +17,17 @@ Expressions for the uncertainty in these fit partameters would be useful as both
 We derive the following expresions for the uncertainty.
 
 Amplitude
-$$
+```math
 \sigma_A^2 = \frac{\sigma^{2}}{N}
     \frac{
         4 T \lambda \left(2 T^{2} \lambda^{2} + 2 T \lambda - e^{2 T \lambda} + 1\right)
     }{
         \left(2 T^{2} \lambda^{2} - \cosh{\left(2 T \lambda \right)} + 1\right)
     }
-$$
+```
 
 Phase
-$$
+```math
     \sigma_\phi^2 = \frac{\sigma^{2}}{N  A^{2}}
     \frac{
         4 T \lambda
@@ -37,27 +37,27 @@ $$
         }{
             2 T^{2} \lambda^{2} - \cosh{\left(2 T \lambda \right)} + 1
         }
-$$
+```
 
 Angular Frequency
-$$
+```math
  \sigma_\omega^2 = \frac{\sigma^{2}}{N  A^{2}}
     \frac{
         -8 T \lambda^{3}  \left(e^{2 T \lambda} - 1\right)
         }{
              2 T^{2} \lambda^{2} - \cosh{\left(2 T \lambda \right)} + 1
         }
-$$
+```
 
 Damping Rate
-$$
+```math
     \sigma_\lambda^2 = \frac{\sigma^{2}}{N A^{2} }
     \frac{
         -8 T \lambda^{3}  \left(e^{2 T \lambda} - 1\right)
         }{
         2 T^{2} \lambda^{2} - \cosh{\left(2 T \lambda \right)} + 1
     }
-$$
+```
 
 
 The above expressions have excellent agreement to numerical experiments when the observation duration is greater than the oscillation period (here 1~s).
@@ -68,24 +68,24 @@ To reproduce see
 demos/compare_to_fit.ipynb
 ```
 
-| ![Uncertainty in Amplitude](demos/figures/uncertainty_amplitude.png "Uncertainty in Amplitude") |
-| :---------------------------------------------------------------------------------------------: |
-|                            **Figure 1** - Uncertainty in amplitude.                             |
+| ![Uncertainty in Amplitude](/demos/figures/uncertainty_amplitude.png "Uncertainty in Amplitude") |
+| :----------------------------------------------------------------------------------------------: |
+|                             **Figure 1** - Uncertainty in amplitude.                             |
 
 
-| ![Uncertainty in Damping Rate](demos/figures/uncertainty_damping_rate.png "Uncertainty in Damping Rate") |
-| :------------------------------------------------------------------------------------------------------: |
-|                               **Figure 2** - Uncertainty in damping rate.                                |
+| ![Uncertainty in Damping Rate](/demos/figures/uncertainty_damping_rate.png "Uncertainty in Damping Rate") |
+| :-------------------------------------------------------------------------------------------------------: |
+|                                **Figure 2** - Uncertainty in damping rate.                                |
 
 
-| ![Uncertainty in Frequency](demos/figures/uncertainty_frequency.png "Uncertainty in Frequency") |
-| :---------------------------------------------------------------------------------------------: |
-|                            **Figure 3** - Uncertainty in frequency.                             |
+| ![Uncertainty in Frequency](/demos/figures/uncertainty_frequency.png "Uncertainty in Frequency") |
+| :----------------------------------------------------------------------------------------------: |
+|                             **Figure 3** - Uncertainty in frequency.                             |
 
 
-| ![Uncertainty in Phase](demos/figures/uncertainty_phase.png "Uncertainty in Phase") |
-| :---------------------------------------------------------------------------------: |
-|                        **Figure 4** - Uncertainty in phase.                         |
+| ![Uncertainty in Phase](/demos/figures/uncertainty_phase.png "Uncertainty in Phase") |
+| :----------------------------------------------------------------------------------: |
+|                         **Figure 4** - Uncertainty in phase.                         |
 
 
 ## Methods
