@@ -66,18 +66,14 @@ Frequency
 \sqrt{\frac{  T \lambda_{D}^{3} (-1 +e^{2 T \lambda_{D}} )  }{-1-2 T^2 \lambda_{D}^2 + \cosh{(2 T \lambda_{D})} }}
 ```
 
-
+## Comparison With Simultion
 The above expressions have excellent agreement to numerical experiments when the observation duration is greater than the oscillation period (here 1 s).
-
-Parameters used in simulation $A=1$ m, $f=1$ Hz, $\lambda_{D}=0.01$, $\sigma=0.01$,$N=10^{3}$.
+Parameters used in simulation $A=1$ m, $f=1$ Hz, $\lambda_{D}=0.01$, $\sigma=0.01$, $N=10^{3}$.
 To reproduce see
 ```
 demos/compare_to_fit.ipynb
 ```
 
-| ![Uncertainty in Amplitude](/demos/figures/uncertainty_amplitude.png "Uncertainty in Amplitude") |
-| :----------------------------------------------------------------------------------------------: |
-|                             **Figure 1** - Uncertainty in amplitude.                             |
 
 
 | ![Uncertainty in Damping Rate](/demos/figures/uncertainty_damping_rate.png "Uncertainty in Damping Rate") |
@@ -89,6 +85,10 @@ demos/compare_to_fit.ipynb
 | :----------------------------------------------------------------------------------------------: |
 |                             **Figure 3** - Uncertainty in frequency.                             |
 
+
+| ![Uncertainty in Amplitude](/demos/figures/uncertainty_amplitude.png "Uncertainty in Amplitude") |
+| :----------------------------------------------------------------------------------------------: |
+|                             **Figure 1** - Uncertainty in amplitude.                             |
 
 | ![Uncertainty in Phase](/demos/figures/uncertainty_phase.png "Uncertainty in Phase") |
 | :----------------------------------------------------------------------------------: |
