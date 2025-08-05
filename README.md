@@ -18,7 +18,7 @@ We derive the following expresions for the uncertainty.
 
 Amplitude
 ```math
-\sigma_A^2 = \frac{\sigma^{2}}{N}
+\sigma_A^2 = \frac{\sigma_m^{2}}{N}
     \frac{
         4 T \lambda \left(2 T^{2} \lambda^{2} + 2 T \lambda - e^{2 T \lambda} + 1\right)
     }{
@@ -28,7 +28,7 @@ Amplitude
 
 Phase
 ```math
-    \sigma_\phi^2 = \frac{\sigma^{2}}{N  A^{2}}
+    \sigma_\phi^2 = \frac{\sigma_m^{2}}{N  A^{2}}
     \frac{
         4 T \lambda
         \left(
@@ -39,9 +39,20 @@ Phase
         }
 ```
 
+
+Damping Rate
+```math
+    \sigma_\lambda^2 = \frac{\sigma_m^{2}}{N A^{2} }
+    \frac{
+        -8 T \lambda^{3}  \left(e^{2 T \lambda} - 1\right)
+        }{
+        2 T^{2} \lambda^{2} - \cosh{\left(2 T \lambda \right)} + 1
+    }
+```
+
 Angular Frequency
 ```math
- \sigma_\omega^2 = \frac{\sigma^{2}}{N  A^{2}}
+ \sigma_\omega^2 = \frac{\sigma_m^{2}}{N  A^{2}}
     \frac{
         -8 T \lambda^{3}  \left(e^{2 T \lambda} - 1\right)
         }{
@@ -49,14 +60,10 @@ Angular Frequency
         }
 ```
 
-Damping Rate
+Frequency
 ```math
-    \sigma_\lambda^2 = \frac{\sigma^{2}}{N A^{2} }
-    \frac{
-        -8 T \lambda^{3}  \left(e^{2 T \lambda} - 1\right)
-        }{
-        2 T^{2} \lambda^{2} - \cosh{\left(2 T \lambda \right)} + 1
-    }
+\sigma_{f}= \frac{\sigma_m}{a}  \frac{\sqrt{2}}{\pi \sqrt{N}}
+\sqrt{\frac{  T \lambda_{D}^{3} (-1 +e^{2 T \lambda_{D}} )  }{-1-2 T^2 \lambda_{D}^2 + \cosh{(2 T \lambda_{D})} }}
 ```
 
 
