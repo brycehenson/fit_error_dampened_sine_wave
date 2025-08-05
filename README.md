@@ -6,7 +6,7 @@ This repository derives the error in the parameters when fitting a damped sine w
 ```math
     f(t)=A e^{-t\lambda} \sin{(\omega t+\phi)}
 ```
-Given a fit to N observations evenly spaced over obeservation time T where each sample has noise $\sigma_m$ we find a closed form expression the uncertainty in the parameters $A$,$\lambda$,$\omega$,$\phi$.
+Given a fit to N observations evenly spaced over obeservation time T where each sample has noise $\sigma_m$ we find a closed form expression the uncertainty in the parameters $A$, $\lambda$ , $\omega$ , $\phi$.
 
 ## Motivation
 
