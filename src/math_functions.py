@@ -18,6 +18,17 @@ def damp_sine_wave(
     )
 
 
+def sine_wave(
+    time: float | npt.NDArray[np.float64],
+    frequency: float,
+    amplitude: float = 1.0,
+    phase: float = 0.0,
+) -> float | npt.NDArray[np.float64]:
+    """Calculate the damped sine wave value at a given time."""
+
+    return amplitude * np.sin(2 * np.pi * frequency * time + phase)
+
+
 def apparent_frequency(f: float, f_s: float) -> float:
     """Compute the apparent frequency (alias) observed when sampling a signal with a true frequency `f`
     at a sampling frequency `f_s`.

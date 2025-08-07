@@ -17,7 +17,7 @@ class FitDampSineUncertaintyEstimate(FitSineUncertaintyEstimate):
     damping_rate: float  # renamed because `lambda` is a reserved keyword
 
 
-def analy_err_in_fit_sine(
+def analy_err_in_fit_cw_sine(
     amplitude: float,
     samp_num: int,
     samp_time: float,
@@ -72,7 +72,7 @@ def analy_err_in_fit_sine(
 
 
 def analy_err_in_fit_damp_sine_old_wrong(
-    amp: float,
+    amplitude: float,
     samp_num: int,
     samp_time: float,
     sigma_obs: float,
@@ -125,7 +125,7 @@ def analy_err_in_fit_damp_sine_old_wrong(
         )
         sigma_freq = (
             (sigma_obs)
-            / (amp * np.pi * np.sqrt(samp_num))
+            / (amplitude * np.pi * np.sqrt(samp_num))
             * np.sqrt(num_freq / den_freq)
         )
         # formula says 4
@@ -143,7 +143,9 @@ def analy_err_in_fit_damp_sine_old_wrong(
         den_phi = (
             -1 - 2 * (damp_rate * samp_time) ** 2 + np.cosh(2 * damp_rate * samp_time)
         )
-        sigma_phi = np.sqrt(4 / samp_num) * sigma_obs / amp * np.sqrt(num_phi / den_phi)
+        sigma_phi = (
+            np.sqrt(4 / samp_num) * sigma_obs / amplitude * np.sqrt(num_phi / den_phi)
+        )
 
         num_lam = (
             damp_rate**3
@@ -163,12 +165,17 @@ def analy_err_in_fit_damp_sine_old_wrong(
             + 1
         ) ** 2
         sigma_lambda = (
-            2 * (sigma_obs / (amp * np.sqrt(samp_num))) * np.sqrt(num_lam / den_lam)
+            2
+            * (sigma_obs / (amplitude * np.sqrt(samp_num)))
+            * np.sqrt(num_lam / den_lam)
         )
 
     else:
-        result = analy_err_in_fit_sine(
-            amplitude=amp, samp_num=samp_num, samp_time=samp_time, sigma_obs=sigma_obs
+        result = analy_err_in_fit_cw_sine(
+            amplitude=amplitude,
+            samp_num=samp_num,
+            samp_time=samp_time,
+            sigma_obs=sigma_obs,
         )
         sigma_amp = result.amplitude
         sigma_freq = result.frequency
@@ -184,7 +191,7 @@ def analy_err_in_fit_damp_sine_old_wrong(
 
 
 def analy_err_in_fit_damp_sine(
-    amp: float,
+    amplitude: float,
     samp_num: int,
     samp_time: float,
     sigma_obs: float,
@@ -245,7 +252,7 @@ def analy_err_in_fit_damp_sine(
             * sigma_obs**2
             * (np.exp(2 * damp_rate * samp_time) - 1)
             / (
-                amp**2
+                amplitude**2
                 * samp_num
                 * (
                     2 * damp_rate**2 * samp_time**2
@@ -271,7 +278,7 @@ def analy_err_in_fit_damp_sine(
                 + 1 / 2
             )
             / (
-                amp**2
+                amplitude**2
                 * samp_num
                 * (
                     2 * damp_rate**2 * samp_time**2
@@ -292,7 +299,7 @@ def analy_err_in_fit_damp_sine(
             * sigma_obs**2
             * (np.exp(2 * damp_rate * samp_time) - 1)
             / (
-                amp**2
+                amplitude**2
                 * samp_num
                 * (
                     2 * damp_rate**2 * samp_time**2
@@ -311,4 +318,129 @@ def analy_err_in_fit_damp_sine(
         frequency=sigma_freq,
         phase=sigma_phi,
         damping_rate=sigma_lambda,
+    )
+
+
+def analy_err_in_fit_damp_sine_short_analytic(
+    amplitude: float,
+    frequency: float,
+    samp_num: int,
+    samp_time: float,
+    sigma_obs: float,
+    damp_rate: float,
+    phase: float,
+) -> FitDampSineUncertaintyEstimate:
+    """just messing around trying to get some intuition for what the short time behaviour is
+
+    Args:
+        amplitude: _description_
+        frequency: _description_
+        samp_num: _description_
+        samp_time: _description_
+        sigma_obs: _description_
+        damp_rate: _description_. Defaults to 0.
+        phi: _description_. Defaults to 0.0.
+
+    Returns:
+        _description_
+    """
+
+    long_time_res = analy_err_in_fit_damp_sine(
+        amplitude=amplitude,
+        samp_num=samp_num,
+        samp_time=samp_time,
+        sigma_obs=sigma_obs,
+        damp_rate=damp_rate,
+    )
+    sigma_freq = long_time_res.frequency
+    sigma_amp = long_time_res.amplitude
+    sigma_phi = long_time_res.phase
+    sigma_damp = long_time_res.damping_rate
+
+    div_num_cycles = (1 + np.sin(phase) ** 2) / 2
+    samp_time_div_pt = div_num_cycles * 2 / (2 * frequency)
+    if samp_time < samp_time_div_pt:
+        div_pt = analy_err_in_fit_damp_sine(
+            amplitude=amplitude,
+            samp_num=samp_num,
+            samp_time=samp_time,
+            sigma_obs=sigma_obs,
+            damp_rate=damp_rate,
+        )
+        # when phase = 0 or pi , power = 3
+        # when phase pi/2, power =2
+        power = 2 + (np.cos(phase)) ** 6
+        sigma_freq = div_pt.frequency * (samp_time_div_pt / samp_time) ** power
+
+    samp_time_div_pt = 1 / (3.5 * frequency)
+    if samp_time < samp_time_div_pt:
+        # ...
+        div_pt = analy_err_in_fit_damp_sine(
+            amplitude=amplitude,
+            samp_num=samp_num,
+            samp_time=samp_time_div_pt,
+            sigma_obs=sigma_obs,
+            damp_rate=damp_rate,
+        )
+        sigma_amp = div_pt.phase * (samp_time_div_pt / samp_time) ** 4
+        sigma_phi = div_pt.phase * (samp_time_div_pt / samp_time) ** 3
+
+    return FitDampSineUncertaintyEstimate(
+        amplitude=sigma_amp,
+        frequency=sigma_freq,
+        phase=sigma_phi,
+        damping_rate=sigma_damp,
+    )
+
+
+def analy_err_in_fit_cw_sine_short_dur(
+    amplitude: float,
+    frequency: float,
+    samp_num: int,
+    samp_time: float,
+    sigma_obs: float,
+    phase: float,
+) -> FitSineUncertaintyEstimate:
+    """Estimate parameter uncertainties for damped sine wave fit.
+    development
+    have not derived this just found it from messing with fits and looking at the dependence
+    """
+    long_time_res = analy_err_in_fit_cw_sine(
+        amplitude=amplitude,
+        samp_num=samp_num,
+        samp_time=samp_time,
+        sigma_obs=sigma_obs,
+    )
+    sigma_freq = long_time_res.frequency
+    sigma_amp = long_time_res.amplitude
+    sigma_phi = long_time_res.phase
+    samp_time_div_pt = 1 / (2 * frequency)
+    if samp_time < samp_time_div_pt:
+        div_pt = analy_err_in_fit_cw_sine(
+            amplitude=amplitude,
+            samp_num=samp_num,
+            samp_time=samp_time_div_pt,
+            sigma_obs=sigma_obs,
+        )
+        # when phase = 0 or pi , power = 3
+        # when phase pi/2, power =2
+        power = 2 + (np.cos(phase)) ** 6
+        sigma_freq = div_pt.frequency * (samp_time_div_pt / samp_time) ** power
+
+    samp_time_div_pt = 1 / (3.5 * frequency)
+    if samp_time < samp_time_div_pt:
+        # ...
+        div_pt = analy_err_in_fit_cw_sine(
+            amplitude=amplitude,
+            samp_num=samp_num,
+            samp_time=samp_time_div_pt,
+            sigma_obs=sigma_obs,
+        )
+        sigma_amp = div_pt.phase * (samp_time_div_pt / samp_time) ** 4
+        sigma_phi = div_pt.phase * (samp_time_div_pt / samp_time) ** 3
+
+    return FitSineUncertaintyEstimate(
+        amplitude=sigma_amp,
+        frequency=sigma_freq,
+        phase=sigma_phi,
     )
