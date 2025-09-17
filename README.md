@@ -76,23 +76,24 @@ demos/compare_to_fit.ipynb
 
 
 
-| ![Uncertainty in Damping Rate](/demos/figures/uncertainty_damping_rate.png "Uncertainty in Damping Rate") |
-| :-------------------------------------------------------------------------------------------------------: |
-|                                **Figure 2** - Uncertainty in damping rate.                                |
-
 
 | ![Uncertainty in Frequency](/demos/figures/uncertainty_frequency.png "Uncertainty in Frequency") |
 | :----------------------------------------------------------------------------------------------: |
-|                             **Figure 3** - Uncertainty in frequency.                             |
-
-
-| ![Uncertainty in Amplitude](/demos/figures/uncertainty_amplitude.png "Uncertainty in Amplitude") |
-| :----------------------------------------------------------------------------------------------: |
-|                             **Figure 1** - Uncertainty in amplitude.                             |
+|                             **Figure 1** - Uncertainty in frequency.                             |
 
 | ![Uncertainty in Phase](/demos/figures/uncertainty_phase.png "Uncertainty in Phase") |
 | :----------------------------------------------------------------------------------: |
-|                         **Figure 4** - Uncertainty in phase.                         |
+|                         **Figure 2** - Uncertainty in phase.                         |
+
+| ![Uncertainty in Amplitude](/demos/figures/uncertainty_amplitude.png "Uncertainty in Amplitude") |
+| :----------------------------------------------------------------------------------------------: |
+|                             **Figure 3** - Uncertainty in amplitude.                             |
+
+
+| ![Uncertainty in Damping Rate](/demos/figures/uncertainty_damping_rate.png "Uncertainty in Damping Rate") |
+| :-------------------------------------------------------------------------------------------------------: |
+|                                **Figure 4** - Uncertainty in damping rate.                                |
+
 
 
 ## Methods
