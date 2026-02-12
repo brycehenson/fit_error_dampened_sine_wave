@@ -146,5 +146,6 @@
     "pylint.args": [
         "-j 4"
     ],
-    "workbench.editorLargeFileConfirmation": 50
+    "workbench.editorLargeFileConfirmation": 50,
+    "python.analysis.typeCheckingMode": "standard"
 }

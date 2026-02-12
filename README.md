@@ -131,3 +131,15 @@ We use a development container for reproducible setup so reproducing these resul
    - Open the notebook at `demos/compare_to_fit.ipynb`. and `demos/derivation.ipynb`.
    - Run the cells to generate derivations,figures and compare numerical fit simulations.
 
+
+
+### Future Directions
+- [ ] repeat this derivation for a amplitude/time chirped sine wave
+- [ ] try to handle the short time behaviour
+  - I don't have any intention of continuing here. I don't think there is any use. Why would you ever be trying to fit a sine wave with less than one cycle.
+  - I tried dropping back to the CW case and doing a derivation for the short time case `demos/derivation_short_time_cw.ipynb`
+    - I tried doing some taylor expansions but didnt find much joy.
+    - I have not found any good approximations that simplify the massive expressions.
+  - I have tried some purely empirical extensions for the CW and damped case that do ok.
+    - I added a power dependence for times below some fraction of a cycle.
+    - one approach would be to fit some terms to simulations.

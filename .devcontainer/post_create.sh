@@ -1,19 +1,19 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[post-create] Verifying internet connectivity (ping google.com)"
+if ! ping -c 1 -W 2 google.com >/dev/null 2>&1; then
+  echo "[post-create] Unable to reach google.com; aborting." >&2
+  exit 1
+fi
 
 
-# set the launch directory as the project path env variable
-export PROJECTPATH=$PWD
-echo "PROJECTPATH environment variable set to ${QCSTACKPATH}"
-
-export BROWSER_PATH="/usr/local/bin/chrome-wrapper"
-echo "BROWSER_PATH environment variable set to ${BROWSER_PATH}"
-
-# Add bash completions
-echo "source /usr/share/bash-completion/completions/git" >> ~/.bashrc && \
+echo "[post-create] Installing project dependencies with uv (system site-packages)"
+UV_PROJECT_ENVIRONMENT="$(python -c "import sysconfig; print(sysconfig.get_config_var('prefix'))")" \
+  uv sync --extra dev
 
 # Setup some git settings to make it work out of the box
-git config --global --add safe.directory ${PROJECTPATH}
+git config --global --add safe.directory ${WorkspaceFolder}
 
 # Merge by default
 git config pull.rebase false
@@ -24,10 +24,7 @@ git config --local include.path "../.devcontainer/clear_ipynb_output.gitconfig" 
 pre-commit install
 
 # Make sure everything is owned by us (we used to use the root user in the container)
-sudo chown -R vscode:vscode $PROJECTPATH
-
-# Install the packages
-./install.sh
+sudo chown -R vscode:vscode $WorkspaceFolder
 
 # fix jupyter behaviour
 .devcontainer/fix_jupyter.sh
