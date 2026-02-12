@@ -91,7 +91,7 @@ def test_damped_fit_errors_match_spread_from_noisy_fits(
     damp_rate = 1.0 / damping_time
 
     analytic = analy_err_in_fit_damp_sine(
-        amp=amp,
+        amplitude=amp,
         samp_num=samp_num,
         samp_time=samp_time,
         sigma_obs=sigma_obs,
@@ -135,7 +135,7 @@ def test_damped_fit_errors_are_finite_and_positive_in_valid_range(
     damp_rate = freq / 7.0  # damping time = 7 cycles (> 5 cycles)
 
     estimate = analy_err_in_fit_damp_sine(
-        amp=amp,
+        amplitude=amp,
         samp_num=samp_num,
         samp_time=samp_time,
         sigma_obs=sigma_obs,
@@ -163,14 +163,14 @@ def test_damped_fit_errors_scale_linearly_with_observation_noise() -> None:
     scale = 2.5
 
     est_base = analy_err_in_fit_damp_sine(
-        amp=amp,
+        amplitude=amp,
         samp_num=samp_num,
         samp_time=samp_time,
         sigma_obs=base_sigma,
         damp_rate=damp_rate,
     )
     est_scaled = analy_err_in_fit_damp_sine(
-        amp=amp,
+        amplitude=amp,
         samp_num=samp_num,
         samp_time=samp_time,
         sigma_obs=base_sigma * scale,
