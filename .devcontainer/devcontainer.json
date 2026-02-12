@@ -36,7 +36,8 @@
 				"tomoki1207.pdf",
 				"ms-azuretools.vscode-docker",
 				"tamasfe.even-better-toml",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"openai.chatgpt"
 			]
 		}
 	},
@@ -48,6 +49,6 @@
 	// Fix the permissions - the devcontainer maps the user to the system user, so this needs to be done here.
 	"onCreateCommand": ".devcontainer/fix_permissions.sh",
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": ".devcontainer/post_create_commands.sh",
+	"postCreateCommand": ".devcontainer/post_create.sh",
 	"remoteUser": "vscode"
 }

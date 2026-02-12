@@ -2,8 +2,10 @@ ARG VARIANT=3.13-bookworm
 FROM mcr.microsoft.com/devcontainers/python:1-${VARIANT}
 
 
-# Base setup and dependenciess
-RUN echo "Removing the debian system python since we don't need two pythons" && \
+# Base setup and dependencies
+RUN echo "Disabling stale Yarn apt repo from base image" && \
+    rm -f /etc/apt/sources.list.d/yarn.list /etc/apt/sources.list.d/yarn.list.save && \
+    echo "Removing the debian system python since we don't need two pythons" && \
     apt-get -y remove python3 && sudo apt-get -y autoremove && \
     echo "Adding ping and curl!" && \
     apt-get update && apt-get -y install iputils-ping curl && \
@@ -27,15 +29,15 @@ RUN echo "Removing the debian system python since we don't need two pythons" && 
     echo "Done base setup"
 
 # install requirements for kaleido
-RUN  sudo apt update && \
+RUN sudo apt update && \
     sudo apt-get install -y libnss3 libatk-bridge2.0-0 libcups2 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libpango-1.0-0 libcairo2 libasound2
 
-# Copy the script to install poetry
+# Copy the setup scripts
 COPY .devcontainer/*.sh /setup_scripts/
 
 
 RUN echo "Run setup setup_scripts" && \
-    /setup_scripts/install_poetry.sh && \
+    bash /setup_scripts/install_uv.sh && \
     echo "Fixing permissions" && \
     usermod -aG dialout vscode && \
     /setup_scripts/fix_permissions.sh && \
@@ -44,7 +46,3 @@ RUN echo "Run setup setup_scripts" && \
 
 
 USER vscode
-RUN echo "Make it turn off venvs because it's a container" && \
-    poetry config virtualenvs.create false && \
-    poetry config virtualenvs.in-project true && \
-    echo "Done"
