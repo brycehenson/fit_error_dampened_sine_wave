@@ -121,7 +121,9 @@ def test_damped_fit_errors_match_spread_from_noisy_fits(
 
 
 @pytest.mark.parametrize("cycles", [3.25, 5.0, 9.0])
-def test_damped_fit_errors_are_finite_and_positive_in_valid_range(cycles: float) -> None:
+def test_damped_fit_errors_are_finite_and_positive_in_valid_range(
+    cycles: float,
+) -> None:
     """Check all returned uncertainties are finite and positive in valid regime."""
 
     freq = 1.0
