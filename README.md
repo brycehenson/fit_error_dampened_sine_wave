@@ -1,4 +1,6 @@
 # Fit Error for Damped Sine Wave
+[![pipeline status](https://gitlab.com/brycehenson/fit_error_dampened_sine_wave/badges/main/pipeline.svg)](https://gitlab.com/brycehenson/fit_error_dampened_sine_wave/-/pipelines)
+
 by **[Bryce M. Henson](https://github.com/brycehenson)**
 
 

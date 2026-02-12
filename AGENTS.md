@@ -44,3 +44,9 @@ class LocalFieldSource(FieldSource, ABC):
 - If you create or edit runnable scripts or modules, run a minimal invocation of the code to validate it executes.
 - If you create or edit notebooks, execute them end-to-end and report the outcome.
 - Always report lint/test/notebook execution results in the final response, and explicitly call out any skips with reasons.
+
+## Testing conventions
+- Add a docstring to every `test_*` function.
+- Any test that uses pseudorandom data must use a seeded NumPy generator:
+  - `np_rng = np.random.default_rng(42)`
+  Rationale: fixed seeds prevent intermittent CI failures from random noise.
