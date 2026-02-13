@@ -1,7 +1,8 @@
 """Tests for statistical math utility helpers."""
 
 import numpy as np
-from src.math_utils import sample_std_expected_std
+
+from fit_error_dampened_sine_wave.math_utils import sample_std_expected_std
 
 
 def test_sample_std_expected_std_matches_monte_carlo_spread() -> None:

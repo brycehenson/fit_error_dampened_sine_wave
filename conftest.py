@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 
@@ -25,9 +27,6 @@ def seed_and_lock_numpy_rng(request: pytest.FixtureRequest) -> None:
     )
     if not same_state:
         raise AssertionError("NumPy RNG state changed; random was called.")
-
-
-import pytest
 
 
 @pytest.fixture(autouse=True)

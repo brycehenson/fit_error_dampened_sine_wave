@@ -3,7 +3,8 @@
 import numpy as np
 import pytest
 from plotly.subplots import make_subplots
-from src.plot_utils import make_ci_polygon, plot_curve_with_ci
+
+from fit_error_dampened_sine_wave.plot_utils import make_ci_polygon, plot_curve_with_ci
 
 
 def test_make_ci_polygon_with_constant_ci_returns_closed_polygon() -> None:
