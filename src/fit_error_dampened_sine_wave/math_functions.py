@@ -1,3 +1,5 @@
+"""Numeric helpers for damped sine models and frequency aliasing."""
+
 import numpy as np
 import numpy.typing as npt
 
@@ -30,12 +32,12 @@ def sine_wave(
 
 
 def apparent_frequency(f: float, f_s: float) -> float:
-    """Compute the apparent frequency (alias) observed when sampling a signal with a true frequency `f`
-    at a sampling frequency `f_s`.
+    """Compute alias frequency from true frequency and sample rate.
 
     from
     "Trap Frequency Measurement with a Pulsed Atom Laser"
-    B. M. Henson,∗ K. F. Thomas, Z. Mehdi, T. G. Burnett, J. A. Ross, S. S. Hodgman, and A. G. Truscot
+    B. M. Henson,∗ K. F. Thomas, Z. Mehdi, T. G. Burnett, J. A. Ross,
+    S. S. Hodgman, and A. G. Truscot
     https://arxiv.org/pdf/2201.10021
 
     This follows the piecewise formula given in the figure:
@@ -53,11 +55,11 @@ def apparent_frequency(f: float, f_s: float) -> float:
     """
     assert f > 0, "True frequency f must be positive and nonzero"
 
-    N: int = int(np.floor(2 * f / f_s)) + 1  # Determine Nyquist zone index
+    nyquist_zone_index = int(np.floor(2 * f / f_s)) + 1
 
-    if N % 2 == 0:
-        f_a: float = -f + N * f_s / 2
+    if nyquist_zone_index % 2 == 0:
+        f_a: float = -f + nyquist_zone_index * f_s / 2
     else:
-        f_a: float = f - (N - 1) * f_s / 2
+        f_a = f - (nyquist_zone_index - 1) * f_s / 2
 
     return f_a

@@ -1,3 +1,6 @@
+"""String-formatting helpers used by plotting utilities."""
+
+
 def make_plotly_power_ten(
     power: int,
 ) -> str:

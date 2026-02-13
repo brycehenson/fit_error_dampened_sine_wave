@@ -1,3 +1,5 @@
+"""Symbolic matrix utilities for symmetric-matrix inverses and summaries."""
+
 import multiprocessing
 from typing import Callable, Dict, Tuple
 
@@ -27,18 +29,18 @@ def symbolic_symmetric_inverse_template(
             symbols[(i, j)] = sym
             symbols[(j, i)] = sym  # symmetry
 
-    A_sym = sp.Matrix(n, n, lambda i, j: symbols[(i, j)])
+    matrix_sym = sp.Matrix(n, n, lambda i, j: symbols[(i, j)])
 
     print("creating template for symbolic symmetric inverse")
-    A_inv_sym = A_sym.inv()
+    matrix_inv_sym = matrix_sym.inv()
 
-    A_inv_sym = A_inv_sym.applyfunc(sp.expand)
-    A_inv_sym = A_inv_sym.applyfunc(sp.expand_trig)
-    A_inv_sym = A_inv_sym.applyfunc(sp.factor)
-    A_inv_sym = A_inv_sym.applyfunc(sp.cancel)
-    A_inv_sym = A_inv_sym.applyfunc(sp.simplify)
+    matrix_inv_sym = matrix_inv_sym.applyfunc(sp.expand)
+    matrix_inv_sym = matrix_inv_sym.applyfunc(sp.expand_trig)
+    matrix_inv_sym = matrix_inv_sym.applyfunc(sp.factor)
+    matrix_inv_sym = matrix_inv_sym.applyfunc(sp.cancel)
+    matrix_inv_sym = matrix_inv_sym.applyfunc(sp.simplify)
 
-    return A_inv_sym, symbols
+    return matrix_inv_sym, symbols
 
 
 def inverse_via_symmetric_substitution(mat: sp.Matrix) -> sp.Matrix:
@@ -56,12 +58,12 @@ def inverse_via_symmetric_substitution(mat: sp.Matrix) -> sp.Matrix:
     assert mat.shape == (n, n), "Matrix must be square"
 
     # Precompute symbolic inverse template and symbol mapping
-    A_inv_sym, symbols = symbolic_symmetric_inverse_template(n)
+    matrix_inv_sym, symbols = symbolic_symmetric_inverse_template(n)
 
     # Build substitution map from symbolic entries to actual matrix elements
     subs_map = {symbols[(i, j)]: mat[i, j] for i in range(n) for j in range(i, n)}
     print("applying substitution to symbolic inverse")
-    return A_inv_sym.subs(subs_map)
+    return matrix_inv_sym.subs(subs_map)
 
 
 def simplify_expr(expr: sp.Expr) -> sp.Expr:
@@ -114,7 +116,7 @@ def sym_info(e: sp.Expr):
     num_terms = sp.core.function.count_ops(e)
     str_len = len(str(e))
     print(f"symbolic expression has {num_terms:_} terms and length {str_len:_}")
-    inbuilt_count = dict()
+    inbuilt_count = {}
     inbuilt_count["sp.pow"] = e.count(sp.Pow)
     inbuilt_count["sp.trig"] = e.count(sp.sin)
 

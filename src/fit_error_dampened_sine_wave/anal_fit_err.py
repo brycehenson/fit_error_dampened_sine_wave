@@ -1,12 +1,15 @@
+"""Analytical uncertainty estimates for sine and damped-sine fits."""
+
 from dataclasses import dataclass
 from typing import Optional
 
 import numpy as np
-import numpy.typing as npt
 
 
 @dataclass
 class FitSineUncertaintyEstimate:
+    """Uncertainty estimates for an undamped sine fit."""
+
     amplitude: float
     frequency: float
     phase: float
@@ -14,6 +17,8 @@ class FitSineUncertaintyEstimate:
 
 @dataclass
 class FitDampSineUncertaintyEstimate(FitSineUncertaintyEstimate):
+    """Uncertainty estimates for a damped sine fit."""
+
     damping_rate: float  # renamed because `lambda` is a reserved keyword
 
 
@@ -81,7 +86,8 @@ def analy_err_in_fit_damp_sine(
     """Estimate parameter uncertainties for damped sine wave fit.
 
     Valid when the damping time is long compare to the oscillation period.
-    In practice when the damping time > ~ 3 oscillation periods, the formula should be reasonably accurate.
+    In practice when damping time is more than about 3 oscillation periods,
+    this formula is usually reasonably accurate.
 
     Parameters
     ----------
