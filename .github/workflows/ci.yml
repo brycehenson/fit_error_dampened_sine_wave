@@ -52,7 +52,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Install dependencies
-        run: uv sync --locked --extra dev
+        run:  uv sync --frozen  --group dev
 
       - name: Run pylint
         run: uv run pylint pytest_nb_as_test tests
@@ -73,11 +73,11 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Install dependencies
-        run: uv sync --locked --extra dev
+        run:  uv sync --frozen  --group dev
 
       - name: Run pyright
         run: uv run pyright
-        
+
   test:
     runs-on: ubuntu-latest
     steps:
