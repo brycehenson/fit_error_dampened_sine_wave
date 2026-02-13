@@ -25,3 +25,28 @@ def seed_and_lock_numpy_rng(request: pytest.FixtureRequest) -> None:
     )
     if not same_state:
         raise AssertionError("NumPy RNG state changed; random was called.")
+
+
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def set_plotly_renderer(request: pytest.FixtureRequest) -> None:
+    if request.node.get_closest_marker("notebook") is None:
+        yield
+        return
+
+    try:
+        import plotly.io as pio
+    except ModuleNotFoundError:
+        yield
+        return
+
+    os.environ.setdefault("PLOTLY_RENDERER", "json")
+
+    import plotly.io as pio
+
+    pio.renderers.default = "json"
+    pio.renderers.render_on_display = False
+    pio.show = lambda *args, **kwargs: None
+    yield

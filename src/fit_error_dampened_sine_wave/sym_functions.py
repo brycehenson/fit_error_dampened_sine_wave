@@ -109,19 +109,6 @@ def count_non_integer_atoms(expr: sp.Expr) -> dict:
     }
 
 
-def count_non_integer_atoms(expr: sp.Expr) -> dict:
-    """
-    Count how many times each non-integer atomic expression appears in a SymPy expression.
-
-    Returns:
-        dict: Mapping from atom to count
-    """
-    atoms = expr.atoms()
-    return {
-        atom: expr.count(atom) for atom in atoms if not isinstance(atom, sp.Integer)
-    }
-
-
 def sym_info(e: sp.Expr):
     """Prints information about a symbolic expression."""
     num_terms = sp.core.function.count_ops(e)

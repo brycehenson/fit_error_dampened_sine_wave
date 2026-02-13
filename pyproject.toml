@@ -16,6 +16,8 @@ dependencies = [
     "sympy>=1.14.0",
     "matplotlib>=3.10.5",
     "plotly>=6.2.0",
+    "jupyter-nbconvert>=7.16.6",
+    "ipywidgets>=8.1.7",
     "nbformat>=5.10.0",
     "setuptools>=80.9",
 ]
@@ -38,8 +40,15 @@ dev = [
 managed = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src"]
+packages = ["src/fit_error_dampened_sine_wave"]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["fit_error_dampened_sine_wave",]
+
+[tool.isort]
+profile = "black"

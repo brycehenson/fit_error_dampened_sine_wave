@@ -7,6 +7,12 @@
 			"VARIANT": "3.13-bookworm"
 		}
 	},
+	// get codex authentication into the container
+	// also mount the system cache for uv to speed up installs
+	"mounts": [
+		"source=${localEnv:HOME}/.codex,target=/home/vscode/.codex,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.cache/uv,target=/home/vscode/.cache/uv,type=bind,consistency=cached"
+	],
 	// Configure tool-specific properties.
 	"customizations": {
 		// Configure properties specific to VS Code.
@@ -16,8 +22,6 @@
 				"ms-python.python",
 				"ms-python.vscode-pylance",
 				"ms-python.pylint",
-				"ms-python.black-formatter",
-				"ms-python.isort",
 				"ms-toolsai.jupyter",
 				"ms-toolsai.jupyter-keymap",
 				"ms-toolsai.jupyter-renderers",
@@ -44,7 +48,8 @@
 	// add an environment variable so to make it easier to find the project root from a notebook
 	"containerEnv": {
 		"ProjectPath": "${containerWorkspaceFolder}",
-		"WorkspaceFolder": "${containerWorkspaceFolder}"
+		"WorkspaceFolder": "${containerWorkspaceFolder}",
+		"UV_CACHE_DIR": "/home/vscode/.cache/uv"
 	},
 	// Fix the permissions - the devcontainer maps the user to the system user, so this needs to be done here.
 	"onCreateCommand": ".devcontainer/fix_permissions.sh",

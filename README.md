@@ -1,5 +1,5 @@
 # Fit Error for Damped Sine Wave
-[![pipeline status](https://gitlab.com/brycehenson/fit_error_dampened_sine_wave/badges/main/pipeline.svg)](https://gitlab.com/brycehenson/fit_error_dampened_sine_wave/-/pipelines)
+[![CI (test)](https://img.shields.io/github/actions/workflow/status/brycehenson/fit_error_dampened_sine_wave/ci.yml?branch=main&job=test)](https://github.com/brycehenson/fit_error_dampened_sine_wave/actions/workflows/ci.yml)
 
 by **[Bryce M. Henson](https://github.com/brycehenson)**
 

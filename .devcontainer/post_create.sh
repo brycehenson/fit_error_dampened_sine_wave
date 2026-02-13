@@ -8,9 +8,11 @@ if ! ping -c 1 -W 2 google.com >/dev/null 2>&1; then
 fi
 
 
-echo "[post-create] Installing project dependencies with uv (system site-packages)"
-UV_PROJECT_ENVIRONMENT="$(python -c "import sysconfig; print(sysconfig.get_config_var('prefix'))")" \
-  uv sync --extra dev
+echo "[post-create] Installing from uv.lock into system Python with uv sync"
+# Sync from lockfile into the system interpreter prefix (includes the project + dev group).
+UV_PROJECT_ENVIRONMENT="$(python3 -c 'import sys; print(sys.base_prefix)')" \
+uv sync --frozen --group dev --no-managed-python
+
 
 # Setup some git settings to make it work out of the box
 git config --global --add safe.directory ${WorkspaceFolder}
@@ -26,9 +28,11 @@ pre-commit install
 # Make sure everything is owned by us (we used to use the root user in the container)
 sudo chown -R vscode:vscode $WorkspaceFolder
 
-# fix jupyter behaviour
-.devcontainer/fix_jupyter.sh
-
 # get the embeded chrome for kaleido
 # This is needed for static image export in Plotly
 python3 -c "import kaleido; kaleido.get_chrome_sync()"
+
+
+# symlink my Agents.md
+  ln -s ~/.codex/AGENTS.md ./AGENTS.md
+

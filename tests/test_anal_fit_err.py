@@ -2,8 +2,11 @@ import numpy as np
 import pytest
 from scipy.optimize import curve_fit
 
-from src.anal_fit_err import analy_err_in_fit_damp_sine
-from src.math_functions import damp_sine_wave
+from fit_error_dampened_sine_wave.anal_fit_err import (
+    analy_err_in_fit_cw_sine,
+    analy_err_in_fit_damp_sine,
+)
+from fit_error_dampened_sine_wave.math_functions import damp_sine_wave
 
 
 def _std_from_many_noisy_fits(
@@ -190,3 +193,93 @@ def test_damped_fit_errors_scale_linearly_with_observation_noise() -> None:
     )
 
     np.testing.assert_allclose(scaled_vals / base_vals, scale, rtol=1e-12, atol=0.0)
+
+
+@pytest.mark.parametrize("damp_rate", [None, 0.0, 0])
+def test_damped_fit_errors_fallback_to_undamped_when_damping_is_missing_or_zero(
+    damp_rate: float | None,
+) -> None:
+    """Use undamped analytic uncertainties when damping rate is None or zero."""
+
+    amplitude = 1.2
+    samp_num = 1000
+    samp_time = 5.0
+    sigma_obs = 0.015
+
+    damped_estimate = analy_err_in_fit_damp_sine(
+        amplitude=amplitude,
+        samp_num=samp_num,
+        samp_time=samp_time,
+        sigma_obs=sigma_obs,
+        damp_rate=damp_rate,
+    )
+    undamped_estimate = analy_err_in_fit_cw_sine(
+        amplitude=amplitude,
+        samp_num=samp_num,
+        samp_time=samp_time,
+        sigma_obs=sigma_obs,
+    )
+
+    np.testing.assert_allclose(
+        np.array(
+            [
+                damped_estimate.amplitude,
+                damped_estimate.frequency,
+                damped_estimate.phase,
+            ]
+        ),
+        np.array(
+            [
+                undamped_estimate.amplitude,
+                undamped_estimate.frequency,
+                undamped_estimate.phase,
+            ]
+        ),
+        rtol=0.0,
+        atol=0.0,
+    )
+    assert np.isnan(damped_estimate.damping_rate)
+
+
+def test_damped_fit_errors_fallback_to_undamped_for_tiny_damping_ratio() -> None:
+    """Use undamped uncertainties when samp_time / damp_time is tiny."""
+
+    amplitude = 1.2
+    samp_num = 1000
+    samp_time = 5.0
+    sigma_obs = 0.015
+    damp_rate = 1e-8  # damp_rate * samp_time = 5e-8 << threshold
+
+    damped_estimate = analy_err_in_fit_damp_sine(
+        amplitude=amplitude,
+        samp_num=samp_num,
+        samp_time=samp_time,
+        sigma_obs=sigma_obs,
+        damp_rate=damp_rate,
+    )
+    undamped_estimate = analy_err_in_fit_cw_sine(
+        amplitude=amplitude,
+        samp_num=samp_num,
+        samp_time=samp_time,
+        sigma_obs=sigma_obs,
+    )
+
+    np.testing.assert_allclose(
+        np.array(
+            [
+                damped_estimate.amplitude,
+                damped_estimate.frequency,
+                damped_estimate.phase,
+            ]
+        ),
+        np.array(
+            [
+                undamped_estimate.amplitude,
+                undamped_estimate.frequency,
+                undamped_estimate.phase,
+            ]
+        ),
+        rtol=0.0,
+        atol=0.0,
+    )
+    assert np.isnan(damped_estimate.damping_rate)
