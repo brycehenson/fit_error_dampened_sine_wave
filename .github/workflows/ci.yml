@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  lint:
+  format:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,12 +32,52 @@ jobs:
       - name: isort
         run: uv run isort --check-only .
 
-      - name: nbqa black
-        run: uv run nbqa black --check --nbqa-diff demos/*.ipynb
-
       - name: nbqa isort
         run: uv run nbqa isort --check-only demos/*.ipynb
 
+
+  pylint:
+    name: pylint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        run: uv sync --locked --extra dev
+
+      - name: Run pylint
+        run: uv run pylint pytest_nb_as_test tests
+
+  pyright:
+    name: pyright
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        run: uv sync --locked --extra dev
+
+      - name: Run pyright
+        run: uv run pyright
+        
   test:
     runs-on: ubuntu-latest
     steps:

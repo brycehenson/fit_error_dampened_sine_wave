@@ -34,6 +34,7 @@ dev = [
     "ipykernel>=6.30.0",
     "kaleido>=1.0.0",
     "pytest-nb-as-test",
+    "pyright==1.1.408",
 ]
 
 [tool.uv]
