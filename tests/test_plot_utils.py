@@ -63,10 +63,11 @@ def test_plot_curve_with_ci_adds_fill_and_line_traces() -> None:
     y = np.sin(x)
 
     fig = cast(go.Figure, plot_curve_with_ci(x=x, y=y, ci=0.1))
+    traces = cast(tuple[object, ...], fig.data)
     ci_trace = cast(go.Scatter, fig.data[0])
     curve_trace = cast(go.Scatter, fig.data[1])
 
-    assert len(fig.data) == 2
+    assert len(traces) == 2
     assert ci_trace.fill == "toself"
     assert ci_trace.showlegend is False
     assert curve_trace.mode == "lines"
@@ -86,9 +87,10 @@ def test_plot_curve_with_ci_supports_subplot_add_trace_parameters() -> None:
         fig=fig,
         add_trace_parameters={"row": 1, "col": 2},
     )
+    traces = cast(tuple[object, ...], fig.data)
     ci_trace = cast(go.Scatter, fig.data[0])
     curve_trace = cast(go.Scatter, fig.data[1])
 
-    assert len(fig.data) == 2
+    assert len(traces) == 2
     assert ci_trace.xaxis == "x2"
     assert curve_trace.xaxis == "x2"
