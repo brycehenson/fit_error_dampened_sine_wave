@@ -54,8 +54,11 @@ jobs:
       - name: Install dependencies
         run:  uv sync --frozen  --group dev
 
-      - name: Run pylint
-        run: uv run pylint pytest_nb_as_test tests
+      - name: Run pylint on main code
+        run: uv run pylint src/
+
+      - name: Run pylint on test code
+        run: uv run pylint tests/
 
   pyright:
     name: pyright

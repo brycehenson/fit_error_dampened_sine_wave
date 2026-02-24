@@ -1,7 +1,29 @@
 """Numeric helpers for damped sine models and frequency aliasing."""
 
+from typing import overload
+
 import numpy as np
 import numpy.typing as npt
+
+
+@overload
+def damp_sine_wave(
+    time: float,
+    frequency: float,
+    damping_rate: float,
+    amplitude: float = 1.0,
+    phase: float = 0.0,
+) -> float: ...
+
+
+@overload
+def damp_sine_wave(
+    time: npt.NDArray[np.float64],
+    frequency: float,
+    damping_rate: float,
+    amplitude: float = 1.0,
+    phase: float = 0.0,
+) -> npt.NDArray[np.float64]: ...
 
 
 def damp_sine_wave(
@@ -18,6 +40,24 @@ def damp_sine_wave(
         * np.exp(-damping_rate * time)
         * np.sin(2 * np.pi * frequency * time + phase)
     )
+
+
+@overload
+def sine_wave(
+    time: float,
+    frequency: float,
+    amplitude: float = 1.0,
+    phase: float = 0.0,
+) -> float: ...
+
+
+@overload
+def sine_wave(
+    time: npt.NDArray[np.float64],
+    frequency: float,
+    amplitude: float = 1.0,
+    phase: float = 0.0,
+) -> npt.NDArray[np.float64]: ...
 
 
 def sine_wave(

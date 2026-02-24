@@ -1,7 +1,7 @@
 """Symbolic matrix utilities for symmetric-matrix inverses and summaries."""
 
 import multiprocessing
-from typing import Callable, Dict, Tuple
+from typing import Callable, Dict, Tuple, cast
 
 import sympy as sp
 
@@ -92,7 +92,8 @@ def parallel_simplify_matrix(
     Returns:
         A simplified sympy.Matrix
     """
-    flat_exprs = list(mat)
+    rows_list = cast(list[list[sp.Expr]], mat.tolist())
+    flat_exprs = [expr for row in rows_list for expr in row]
     with multiprocessing.Pool(multiprocessing.cpu_count()) as pool:
         simplified_flat = pool.map(simplifier, flat_exprs)
     return sp.Matrix(mat.rows, mat.cols, simplified_flat)

@@ -14,3 +14,11 @@ repos:
         entry: isort -
         language: system
         types: [python]
+  - repo: local
+    hooks:
+      - id: normalize-notebooks
+        name: normalize notebooks
+        entry: scripts/fix_notebooks.py
+        language: system
+        types: [jupyter]
+        pass_filenames: false

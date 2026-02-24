@@ -1,6 +1,9 @@
 """Tests for confidence interval plotting utilities."""
 
+from typing import cast
+
 import numpy as np
+import plotly.graph_objects as go
 import pytest
 from plotly.subplots import make_subplots
 
@@ -59,12 +62,14 @@ def test_plot_curve_with_ci_adds_fill_and_line_traces() -> None:
     x = np.linspace(0.0, 2.0, 50)
     y = np.sin(x)
 
-    fig = plot_curve_with_ci(x=x, y=y, ci=0.1)
+    fig = cast(go.Figure, plot_curve_with_ci(x=x, y=y, ci=0.1))
+    ci_trace = cast(go.Scatter, fig.data[0])
+    curve_trace = cast(go.Scatter, fig.data[1])
 
     assert len(fig.data) == 2
-    assert fig.data[0].fill == "toself"
-    assert fig.data[0].showlegend is False
-    assert fig.data[1].mode == "lines"
+    assert ci_trace.fill == "toself"
+    assert ci_trace.showlegend is False
+    assert curve_trace.mode == "lines"
 
 
 def test_plot_curve_with_ci_supports_subplot_add_trace_parameters() -> None:
@@ -72,7 +77,7 @@ def test_plot_curve_with_ci_supports_subplot_add_trace_parameters() -> None:
 
     x = np.linspace(0.0, 1.0, 10)
     y = x**2
-    fig = make_subplots(rows=1, cols=2)
+    fig = cast(go.Figure, make_subplots(rows=1, cols=2))
 
     plot_curve_with_ci(
         x=x,
@@ -81,7 +86,9 @@ def test_plot_curve_with_ci_supports_subplot_add_trace_parameters() -> None:
         fig=fig,
         add_trace_parameters={"row": 1, "col": 2},
     )
+    ci_trace = cast(go.Scatter, fig.data[0])
+    curve_trace = cast(go.Scatter, fig.data[1])
 
     assert len(fig.data) == 2
-    assert fig.data[0].xaxis == "x2"
-    assert fig.data[1].xaxis == "x2"
+    assert ci_trace.xaxis == "x2"
+    assert curve_trace.xaxis == "x2"

@@ -1,5 +1,5 @@
 {
-	"name": "Python 3",
+	"name": "fit_error_dampened_sine_wave Dev Container",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",

@@ -50,10 +50,12 @@ def _validate_and_clean_ci_inputs(
     if x_array.shape != y_array.shape:
         raise ValueError("x and y must have identical shapes.")
 
-    if np.isscalar(ci):
-        ci_array = np.full_like(x_array, fill_value=float(ci), dtype=float)
+    ci_array_raw = np.asarray(ci, dtype=float)
+    if ci_array_raw.ndim == 0:
+        ci_scalar = float(ci_array_raw[()])
+        ci_array = np.full_like(x_array, fill_value=ci_scalar, dtype=float)
     else:
-        ci_array = np.asarray(ci, dtype=float)
+        ci_array = ci_array_raw
         if ci_array.ndim != 1:
             raise ValueError("ci must be a scalar or one-dimensional array.")
         if ci_array.shape != x_array.shape:

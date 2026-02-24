@@ -1,4 +1,10 @@
+"""Tests for analytic uncertainty estimates in damped sine-wave fitting."""
+
+from dataclasses import dataclass
+from typing import cast
+
 import numpy as np
+import numpy.typing as npt
 import pytest
 from scipy.optimize import curve_fit
 
@@ -9,49 +15,74 @@ from fit_error_dampened_sine_wave.anal_fit_err import (
 from fit_error_dampened_sine_wave.math_functions import damp_sine_wave
 
 
+@dataclass(frozen=True, kw_only=True)
+class _NoisyFitConfig:
+    """Input parameters for repeated noisy nonlinear fits."""
+
+    amp: float
+    """Signal amplitude."""
+    freq: float
+    """Signal frequency in Hz."""
+    phase: float
+    """Signal phase in radians."""
+    damp_rate: float
+    """Exponential damping rate in inverse seconds."""
+    samp_num: int
+    """Number of uniformly-spaced samples."""
+    samp_time: float
+    """Total observation duration in seconds."""
+    sigma_obs: float
+    """Standard deviation of additive Gaussian observation noise."""
+
+
 def _std_from_many_noisy_fits(
-    amp: float,
-    freq: float,
-    phase: float,
-    damp_rate: float,
-    samp_num: int,
-    samp_time: float,
-    sigma_obs: float,
+    config: _NoisyFitConfig,
     repeats: int = 120,
-) -> np.ndarray:
-    """Estimate parameter spread from repeated nonlinear fits to noisy traces."""
+) -> npt.NDArray[np.float64]:
+    """Estimate parameter spread from repeated nonlinear fits to noisy traces.
+    See _NoisyFitConfig for input parameters."""
 
     np_rng = np.random.default_rng(42)
-    t = np.linspace(0.0, samp_time, samp_num)
+    t = np.linspace(0.0, config.samp_time, config.samp_num)
     y_clean = damp_sine_wave(
         t,
-        frequency=freq,
-        damping_rate=damp_rate,
-        amplitude=amp,
-        phase=phase,
+        frequency=config.freq,
+        damping_rate=config.damp_rate,
+        amplitude=config.amp,
+        phase=config.phase,
     )
 
     def model(
-        x: np.ndarray,
+        x: npt.NDArray[np.float64],
         fit_amp: float,
         fit_freq: float,
         fit_phase: float,
         fit_damp: float,
-    ) -> np.ndarray:
-        return damp_sine_wave(
-            x,
-            frequency=fit_freq,
-            damping_rate=fit_damp,
-            amplitude=fit_amp,
-            phase=fit_phase,
+    ) -> npt.NDArray[np.float64]:
+        return cast(
+            npt.NDArray[np.float64],
+            damp_sine_wave(
+                x,
+                frequency=fit_freq,
+                damping_rate=fit_damp,
+                amplitude=fit_amp,
+                phase=fit_phase,
+            ),
         )
 
-    fit_results: list[np.ndarray] = []
-    initial_guess = np.array([amp * 0.95, freq * 1.02, phase + 0.05, damp_rate * 1.05])
+    fit_results: list[npt.NDArray[np.float64]] = []
+    initial_guess = np.array(
+        [
+            config.amp * 0.95,
+            config.freq * 1.02,
+            config.phase + 0.05,
+            config.damp_rate * 1.05,
+        ]
+    )
 
     for _ in range(repeats):
-        y_noisy = y_clean + np_rng.normal(0.0, sigma_obs, size=samp_num)
-        popt, _ = curve_fit(
+        y_noisy = y_clean + np_rng.normal(0.0, config.sigma_obs, size=config.samp_num)
+        fitted_output = curve_fit(
             model,
             t,
             y_noisy,
@@ -59,9 +90,13 @@ def _std_from_many_noisy_fits(
             maxfev=20000,
             bounds=((0.0, 0.0, -2 * np.pi, 1e-8), (np.inf, np.inf, 2 * np.pi, np.inf)),
         )
-        fit_results.append(popt)
+        # curve_fit returns (popt, pcov):
+        # - popt: best-fit parameters [amp, freq, phase, damp_rate]
+        # - pcov: covariance matrix of those estimates
+        # We collect only popt because this helper estimates spread from repeated fits.
+        fit_results.append(cast(npt.NDArray[np.float64], fitted_output[0]))
 
-    return np.std(np.array(fit_results), axis=0, ddof=1)
+    return cast(npt.NDArray[np.float64], np.std(np.array(fit_results), axis=0, ddof=1))
 
 
 @pytest.mark.parametrize(
@@ -102,13 +137,15 @@ def test_damped_fit_errors_match_spread_from_noisy_fits(
     )
 
     fit_spread = _std_from_many_noisy_fits(
-        amp=amp,
-        freq=freq,
-        phase=phase,
-        damp_rate=damp_rate,
-        samp_num=samp_num,
-        samp_time=samp_time,
-        sigma_obs=sigma_obs,
+        config=_NoisyFitConfig(
+            amp=amp,
+            freq=freq,
+            phase=phase,
+            damp_rate=damp_rate,
+            samp_num=samp_num,
+            samp_time=samp_time,
+            sigma_obs=sigma_obs,
+        ),
     )
 
     analytic_std = np.array(
